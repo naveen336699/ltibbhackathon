@@ -2,39 +2,33 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
-  namespace: naveen
 spec:
-  serviceName: mysql
+  serviceName: "mysql"
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: app-database
   template:
     metadata:
       labels:
-        app: mysql
+        app: app-database
     spec:
       containers:
-      - name: mysql
-        image: mysql:8.0
+      - name: nginx
+        image: naveenb2575/clientapp:dbimage
         ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: root123
-        - name: MYSQL_DATABASE
-          value: bankdb
+        - containerPort: 80
+          name: web
         volumeMounts:
-        - name: mysql-data
-          mountPath: /var/lib/mysql
+        - name: www
+          mountPath: /usr/share/nginx/html
       imagePullSecrets:
-      - name: dockerhub-secret
+            - name: dockerhub-secret
   volumeClaimTemplates:
   - metadata:
-      name: mysql-data
+      name: www
     spec:
-      accessModes:
-        - ReadWriteOnce
+      accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
