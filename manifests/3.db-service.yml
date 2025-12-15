@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysqldb
+  name: mysql
+  namespace: naveen
 spec:
   clusterIP: None
   selector:
-    app: app-database
+    app: mysql
   ports:
-    - port: 3306
-      targetPort: 3306
+  - port: 3306
+    targetPort: 3306
